@@ -1,17 +1,25 @@
+import { any } from "cypress/types/bluebird";
 import { CalculatorService } from "./calculator.service";
 import { LoggerService } from "./logger.service";
 
 describe('Calculatorservice', () => {
 
+    let calculator: CalculatorService;
+    let loggerSpy: any;
+    
+    beforeEach(() => {
+        loggerSpy = jasmine.createSpyObj('LoggerService', ["log"]);
+        calculator = new CalculatorService(loggerSpy);
+    })
+
     // com spyOn
 
     it('should add two numbers', () => {
-        const logger = jasmine.createSpyObj('LoggerService', ["log"]);
+        loggerSpy = jasmine.createSpyObj('LoggerService', ["log"]);
 
         // quando precisar retornar valores de um metodo fake, do it:
         // logger.log.and.returnValue();
 
-        const calculator = new CalculatorService(logger);
         const result = calculator.add(2, 2);
         expect(result).toBe(4);
 
